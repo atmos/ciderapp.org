@@ -13,4 +13,12 @@ describe "Ciderapp.org" do
     data['url'].should eql('http://ciderapp.org/cider.tgz')
     data['recipes'].should eql(['homebrew', 'git', 'rvm', 'node'])
   end
+
+  it "GET /refresh responds w/ the status of generating a new tgz" do
+    response = get '/refresh'
+    JSON.parse(response.body)['status'].should be_true
+
+    response = get '/refresh'
+    JSON.parse(response.body)['status'].should be_true
+  end
 end
