@@ -3,8 +3,9 @@ require 'fileutils'
 
 module CiderApp
   class App < Sinatra::Base
-    disable :show_exceptions
+    set     :root, File.expand_path(File.join(File.dirname(__FILE__), "..", ".."))
     enable  :raise_errors
+    disable :show_exceptions
 
     helpers do
       def silently_run(command)
