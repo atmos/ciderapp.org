@@ -6,11 +6,17 @@ describe "Ciderapp.org" do
     last_response.headers['Location'].should eql("http://github.com/atmos/cider")
   end
 
-  it "GET /latest responds w/ the JSON required to build out an environment" do
-    response = get '/latest'
-    data = JSON.parse(response.body)
+  it "GET /latest/run_list responds w/ the JSON required to build out an environment" do
+    response = get '/latest/run_list'
+    data = JSON.parse(response.body)['data']
 
-    data['url'].should eql('http://ciderapp.org/cider.tgz')
+    data['url'].should eql("http://ciderapp.org/cider.tgz")
+  end
+
+  it "GET /latest/recipes responds w/ the JSON required to build out an environment" do
+    response = get '/latest/recipes'
+    data = JSON.parse(response.body)['data']
+
     data['recipes'].should eql(['homebrew', 'git', 'rvm', 'node'])
   end
 
