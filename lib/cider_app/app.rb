@@ -17,12 +17,8 @@ module CiderApp
       redirect("http://github.com/atmos/cider")
     end
 
-    get '/latest/recipes' do
-      { :data => { :recipes => [ :homebrew, :git, :rvm, :node ] } }.to_json
-    end
-
-    get '/latest/run_list' do
-      { :data => { :url => "http://ciderapp.org/cider.tgz" } }.to_json
+    get '/latest' do
+      { :recipes => [ :homebrew, :git, :rvm, :node ]  }.to_json
     end
 
     get '/refresh' do

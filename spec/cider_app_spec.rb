@@ -1,30 +1,23 @@
-require File.dirname(__FILE__) + '/spec_helper'
+require File.dirname(__FILE__) + "/spec_helper"
 
 describe "Ciderapp.org" do
   it "GET / redirects to the github page" do
-    get '/'
-    last_response.headers['Location'].should eql("http://github.com/atmos/cider")
+    get "/"
+    last_response.headers["Location"].should eql("http://github.com/atmos/cider")
   end
 
   it "GET /latest/run_list responds w/ the JSON required to build out an environment" do
-    response = get '/latest/run_list'
-    data = JSON.parse(response.body)['data']
+    response = get "/latest"
+    data = JSON.parse(response.body)
 
-    data['url'].should eql("http://ciderapp.org/cider.tgz")
-  end
-
-  it "GET /latest/recipes responds w/ the JSON required to build out an environment" do
-    response = get '/latest/recipes'
-    data = JSON.parse(response.body)['data']
-
-    data['recipes'].should eql(['homebrew', 'git', 'rvm', 'node'])
+    data["recipes"].should eql(["homebrew", "git", "rvm", "node"])
   end
 
   it "GET /refresh responds w/ the status of generating a new tgz" do
-    response = get '/refresh'
-    JSON.parse(response.body)['status'].should be_true
+    response = get "/refresh"
+    JSON.parse(response.body)["status"].should be_true
 
-    response = get '/refresh'
-    JSON.parse(response.body)['status'].should be_true
+    response = get "/refresh"
+    JSON.parse(response.body)["status"].should be_true
   end
 end
