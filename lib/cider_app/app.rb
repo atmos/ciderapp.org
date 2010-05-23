@@ -11,6 +11,10 @@ module CiderApp
       def silently_run(command)
         system("#{command} >/dev/null 2>&1")
       end
+
+      def recipe_file
+        @recipe_file ||= "#{options.root}/public/cider.tgz"
+      end
     end
 
     get '/' do
@@ -36,7 +40,7 @@ module CiderApp
         else
           silently_run("git clone git://github.com/atmos/smeagol.git")
         end
-        silently_run("tar czf #{options.root}/public/cider.tgz smeagol")
+        silently_run("tar czf -strip 1 #{recipe_file} smeagol")
       end
       { :status => $? == 0 }.to_json
     end
