@@ -1,2 +1,2 @@
 run "mkdir -p #{release_path}/public"
-run "curl -vv http://ciderapp.org/refresh"
+run "curl http://ciderapp.org/refresh"
