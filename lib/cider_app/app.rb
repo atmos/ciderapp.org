@@ -40,7 +40,9 @@ module CiderApp
         else
           silently_run("git clone git://github.com/atmos/smeagol.git")
         end
-        silently_run("tar czf -strip 1 #{recipe_file} smeagol")
+        Dir.chdir("smeagol") do
+          silently_run("tar czf #{recipe_file} .")
+        end
       end
       { :status => $? == 0 }.to_json
     end
