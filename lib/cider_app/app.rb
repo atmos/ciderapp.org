@@ -18,7 +18,7 @@ module CiderApp
     end
 
     get '/' do
-      redirect("http://github.com/atmos/cider")
+      redirect("http://atmos.github.com/cider")
     end
 
     get '/latest' do
