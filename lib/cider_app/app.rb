@@ -18,10 +18,13 @@ module CiderApp
     end
 
     get '/latest' do
+      content_type :json
       { :recipes => [ :homebrew, :git, :rvm, :node ]  }.to_json
     end
 
     get '/refresh' do
+      content_type :json
+
       Dir.chdir(Dir.tmpdir) do
         FileUtils.mkdir_p "#{options.root}/public"
         if File.directory?("smeagol")
