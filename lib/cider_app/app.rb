@@ -23,7 +23,7 @@ module CiderApp
 
     get '/latest' do
       content_type :json
-      { :recipes => [ :homebrew, :rvm, :node ]  }.to_json
+      { :recipes => [ :homebrew, :rvm, :node, :rails, :sinatra ]  }.to_json
     end
 
     get '/refresh' do
