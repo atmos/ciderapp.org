@@ -18,7 +18,7 @@ module CiderApp
     end
 
     get '/' do
-      redirect("http://atmos.github.com/cider")
+      redirect("http://www.atmos.com/cider")
     end
 
     get '/latest' do
@@ -26,7 +26,7 @@ module CiderApp
       { :recipes => [ :homebrew, :rvm, :node, :rails, :sinatra ]  }.to_json
     end
 
-    get '/refresh' do
+    post '/refresh' do
       content_type :json
 
       Dir.chdir(Dir.tmpdir) do

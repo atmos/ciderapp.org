@@ -3,7 +3,7 @@ require File.dirname(__FILE__) + "/spec_helper"
 describe "Ciderapp.org" do
   it "GET / redirects to the github page" do
     get "/"
-    last_response.headers["Location"].should eql("http://atmos.github.com/cider")
+    last_response.headers["Location"].should eql("http://www.atmos.com/cider")
   end
 
   it "GET /latest/run_list responds w/ the JSON required to build out an environment" do
@@ -14,10 +14,10 @@ describe "Ciderapp.org" do
   end
 
   it "GET /refresh responds w/ the status of generating a new tgz" do
-    response = get "/refresh"
+    response = post "/refresh"
     JSON.parse(response.body)["status"].should be_true
 
-    response = get "/refresh"
+    response = post "/refresh"
     JSON.parse(response.body)["status"].should be_true
   end
 end
