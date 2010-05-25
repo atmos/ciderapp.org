@@ -41,7 +41,7 @@ module CiderApp
           silently_run("git clone git://github.com/atmos/smeagol.git")
         end
         Dir.chdir("smeagol") do
-          silently_run("tar czf #{recipe_file} .")
+          silently_run("tar cvf #{recipe_file} --exclude certificates --exclude config --exclude .git --exclude roles --exclude site-cookbooks .")
         end
       end
       { :status => $? == 0 }.to_json
