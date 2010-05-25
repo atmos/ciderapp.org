@@ -1,2 +1,2 @@
-run "cd #{release_path} && /usr/bin/env HOME=/home/atmos bundle install"
-run "cd #{release_path} && /usr/bin/env HOME=/home/atmos bundle lock"
+run "cd #{release_path} && bundle install"
+run "cd #{release_path} && bundle lock"
