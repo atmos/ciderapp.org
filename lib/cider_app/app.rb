@@ -18,7 +18,7 @@ module CiderApp
     end
 
     get '/' do
-      redirect("http://www.atmos.com/cider")
+      redirect("http://www.atmos.org/cider")
     end
 
     get '/latest' do
@@ -41,7 +41,7 @@ module CiderApp
           silently_run("git clone git://github.com/atmos/smeagol.git")
         end
         Dir.chdir("smeagol") do
-          silently_run("tar cvf #{recipe_file} --exclude certificates --exclude config --exclude .git --exclude roles --exclude site-cookbooks .")
+          silently_run("tar czf #{recipe_file} --exclude certificates --exclude config --exclude .git --exclude roles --exclude site-cookbooks .")
         end
       end
       { :status => $? == 0 }.to_json
