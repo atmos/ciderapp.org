@@ -15,7 +15,7 @@ describe "Ciderapp.org" do
     params = uri.query_values
     params['type'].should eql('web_server')
     params['scope'].should eql('email,offline_access')
-    params['client_id'].should match(/\w{40}/)
+    params['client_id'].should match(/\w{20}/)
     params['redirect_uri'].should eql('http://ciderapp.org/auth/github/callback')
   end
 
