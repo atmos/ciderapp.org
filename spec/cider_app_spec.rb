@@ -13,10 +13,10 @@ describe "Ciderapp.org" do
     uri.scheme.should eql('https')
 
     params = uri.query_values
-    params['type'].should         == 'web_server'
-    params['scope'].should        == 'email,offline_access'
-    params['client_id'].should    == true
-    params['redirect_uri'].should == 'http://ciderapp.org/auth/github/callback'
+    params['type'].should eql('web_server')
+    params['scope'].should eql('email,offline_access')
+    params['client_id'].should match(/\w{40}/)
+    params['redirect_uri'].should eql('http://ciderapp.org/auth/github/callback')
   end
 
   it "GET /latest/run_list responds w/ the JSON required to build out an environment" do

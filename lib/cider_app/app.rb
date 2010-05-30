@@ -3,6 +3,8 @@ require 'fileutils'
 require 'oauth2'
 
 module CiderApp
+  class MisconfiguredOauthTokens < StandardError; end
+
   class App < Sinatra::Base
     set     :root, File.expand_path(File.join(File.dirname(__FILE__), "..", ".."))
     enable  :raise_errors
@@ -10,8 +12,8 @@ module CiderApp
 
     helpers do
       def oauth_client
-        OAuth2::Client.new(ENV['GITHUB_CIDER_CLIENT_ID'],
-                           ENV['GITHUB_CIDER_SECRET'],
+        OAuth2::Client.new(ENV['CIDER_GITHUB_SECRET'],
+                           ENV['CIDER_GITHUB_CLIENT_ID'],
                            :site              => 'https://github.com',
                            :authorize_path    => '/login/oauth/authorize',
                            :access_token_path => '/login/oauth/access_token')
@@ -78,4 +80,12 @@ module CiderApp
       end
     end
   end
+end
+
+if ENV['CIDER_GITHUB_CLIENT_ID'].nil? || ENV['CIDER_GITHUB_SECRET'].nil?
+  raise CiderApp::MisconfiguredOauthTokens, <<-EOS
+Your environment is misconfigured,
+  GITHUB_CIDER_SECRET=#{ENV['CIDER_GITHUB_SECRET'].inspect}
+  GITHUB_CIDER_CLIENT_ID=#{ENV['CIDER_GITHUB_CLIENT_ID'].inspect}
+EOS
 end
