@@ -12,8 +12,8 @@ module CiderApp
 
     helpers do
       def oauth_client
-        OAuth2::Client.new(ENV['CIDER_GITHUB_SECRET'],
-                           ENV['CIDER_GITHUB_CLIENT_ID'],
+        OAuth2::Client.new(ENV['CIDER_GITHUB_CLIENT_ID'],
+                           ENV['CIDER_GITHUB_SECRET'],
                            :site              => 'https://github.com',
                            :authorize_path    => '/login/oauth/authorize',
                            :access_token_path => '/login/oauth/access_token')
