@@ -5,6 +5,7 @@ group :runtime do
   gem "rack_hoptoad",        "~>0.1.2", :require => "rack/hoptoad"
   gem "sinatra",             "~>1.0.0"
   gem "rack",                "~>1.1.0"
+  gem "oauth2"
 end
 
 group :test do
