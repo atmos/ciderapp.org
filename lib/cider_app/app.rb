@@ -25,7 +25,7 @@ module CiderApp
 
     get '/' do
       if authenticated?
-        "<p>Your OAuth access token: #{access_token.token}</p><p>Your extended profile data:\n#{user.inspect}</p>"
+        "<p>Your OAuth access token: #{github_user.token}</p><p>Your extended profile data:\n#{github_user.inspect}</p>"
       else
         redirect 'http://www.atmos.org/cider'
       end
