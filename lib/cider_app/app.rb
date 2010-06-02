@@ -1,4 +1,3 @@
-
 module CiderApp
   class MisconfiguredOauthTokens < StandardError; end
 
