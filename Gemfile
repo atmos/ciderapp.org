@@ -1,11 +1,7 @@
 source :gemcutter
 
 group :runtime do
-  gem "json"
-  gem "rack_hoptoad",        "~>0.1.2", :require => "rack/hoptoad"
-  gem "sinatra",             "~>1.0.0"
-  gem "rack",                "~>1.1.0"
-  gem "oauth2"
+  gem "sinatra_auth_github", '~>0.0.5'
 end
 
 group :test do
@@ -14,6 +10,7 @@ group :test do
   gem "rcov"
   gem "bundler",          "~>0.9.25"
   gem "rack-test",        "~>0.5.3", :require => "rack/test"
+  gem "addressable",      "~>2.1.2"
 end
 
 # vim:ft=ruby

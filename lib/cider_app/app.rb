@@ -1,28 +1,20 @@
-require 'tmpdir'
-require 'fileutils'
-require 'oauth2'
 
 module CiderApp
   class MisconfiguredOauthTokens < StandardError; end
 
+
   class App < Sinatra::Base
     set     :root, File.expand_path(File.join(File.dirname(__FILE__), "..", ".."))
+    set     :config, YAML.load_file(File.join(root, 'config', 'oauth2.yml'))
+    set     :github_options, { :client_id => config['client_id'], :secret => config['secret'] }
+
+    enable  :sessions
     enable  :raise_errors
     disable :show_exceptions
 
+    register Sinatra::Auth::Github
+
     helpers do
-      def oauth_client
-        OAuth2::Client.new(ENV['CIDER_GITHUB_CLIENT_ID'],
-                           ENV['CIDER_GITHUB_SECRET'],
-                           :site              => 'https://github.com',
-                           :authorize_path    => '/login/oauth/authorize',
-                           :access_token_path => '/login/oauth/access_token')
-      end
-
-      def redirect_uri
-        'http://ciderapp.org/auth/github/callback'
-      end
-
       def silently_run(command)
         system("#{command} >/dev/null 2>&1")
       end
@@ -33,12 +25,21 @@ module CiderApp
     end
 
     get '/' do
-      redirect 'http://www.atmos.org/cider'
+      if authenticated?
+        "<p>Your OAuth access token: #{access_token.token}</p><p>Your extended profile data:\n#{user.inspect}</p>"
+      else
+        redirect 'http://www.atmos.org/cider'
+      end
     end
 
     get '/latest' do
       content_type :json
       { :recipes => [ :homebrew, :rvm, :node, :rails, :sinatra ]  }.to_json
+    end
+
+    get '/profile' do
+      authenticate!
+      redirect '/'
     end
 
     post '/refresh' do
@@ -61,31 +62,5 @@ module CiderApp
       end
       { :status => $? == 0 }.to_json
     end
-
-    get '/auth/github' do
-      url = oauth_client.web_server.authorize_url(
-        :scope        => 'email,offline_access',
-        :redirect_uri => redirect_uri
-      )
-      redirect url
-    end
-
-    get '/auth/github/callback' do
-      begin
-        access_token = oauth_client.web_server.get_access_token(params[:code], :redirect_uri => redirect_uri)
-        user = JSON.parse(access_token.get('/api/v2/json/user/show'))
-                      "<p>Your OAuth access token: #{access_token.token}</p><p>Your extended profile data:\n#{user.inspect}</p>"
-      rescue OAuth2::HTTPError
-        %(<p>Outdated ?code=#{params[:code]}:</p><p>#{$!}</p><p><a href="/auth/github">Retry</a></p>)
-      end
-    end
   end
-end
-
-if ENV['CIDER_GITHUB_CLIENT_ID'].nil? || ENV['CIDER_GITHUB_SECRET'].nil?
-  raise CiderApp::MisconfiguredOauthTokens, <<-EOS
-Your environment is misconfigured,
-  GITHUB_CIDER_SECRET=#{ENV['CIDER_GITHUB_SECRET'].inspect}
-  GITHUB_CIDER_CLIENT_ID=#{ENV['CIDER_GITHUB_CLIENT_ID'].inspect}
-EOS
 end

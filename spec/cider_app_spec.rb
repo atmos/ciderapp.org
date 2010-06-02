@@ -6,8 +6,8 @@ describe "Ciderapp.org" do
     response.headers['Location'].should eql('http://www.atmos.org/cider')
   end
 
-  it "GET /auth/github redirects to github oauth" do
-    response = get "/auth/github"
+  it "GET /profile redirects to github oauth" do
+    response = get "/profile"
     uri = Addressable::URI.parse(response.headers["Location"])
     uri.should_not be_nil
     uri.scheme.should eql('https')
@@ -16,7 +16,7 @@ describe "Ciderapp.org" do
     params['type'].should eql('web_server')
     params['scope'].should eql('email,offline_access')
     params['client_id'].should match(/\w{20}/)
-    params['redirect_uri'].should eql('http://ciderapp.org/auth/github/callback')
+    params['redirect_uri'].should eql('http://example.org/auth/github/callback')
   end
 
   it "GET /latest/run_list responds w/ the JSON required to build out an environment" do
