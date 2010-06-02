@@ -15,12 +15,23 @@ module CiderApp
 
     helpers do
       def silently_run(command)
-        system("#{command} >/dev/null 2>&1")
+        system("mkdir -p #{options.root}/log")
+        system("#{command} >> #{options.root}/log/run.log 2>&1")
       end
 
       def recipe_file
         @recipe_file ||= "#{options.root}/public/cider.tgz"
       end
+    end
+
+    get '/profile' do
+      authenticate!
+      redirect '/'
+    end
+
+    get '/logout' do
+      logout!
+      redirect '/'
     end
 
     get '/' do
@@ -36,11 +47,6 @@ module CiderApp
       { :recipes => [ :homebrew, :rvm, :node, :rails, :sinatra ]  }.to_json
     end
 
-    get '/profile' do
-      authenticate!
-      redirect '/'
-    end
-
     post '/refresh' do
       content_type :json
 
@@ -48,6 +54,7 @@ module CiderApp
         FileUtils.mkdir_p "#{options.root}/public"
         if File.directory?("smeagol")
           Dir.chdir("smeagol") do
+            silently_run("ls -l")
             silently_run("git checkout master")
             silently_run("git reset --hard origin/master")
             silently_run("git pull")

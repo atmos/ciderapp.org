@@ -2,3 +2,4 @@ coverage
 .bundle
 public
 config/oauth2.yml
+log
