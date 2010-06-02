@@ -1,4 +1,5 @@
 require 'yaml'
+require 'fileutils'
 require 'sinatra_auth_github'
 
 module CiderApp
