@@ -1,3 +1,5 @@
+require 'sinatra/auth/github'
+
 module CiderApp
   class MisconfiguredOauthTokens < StandardError; end
 
@@ -36,9 +38,20 @@ module CiderApp
 
     get '/' do
       if authenticated?
-        "<p>Your OAuth access token: #{github_user.token}</p><p>Your extended profile data:\n#{github_user.inspect}</p>"
+        redirect '/profile'
       else
         redirect 'http://www.atmos.org/cider'
+      end
+    end
+
+    get '/profile' do
+      begin
+        authenticate!
+        access_token = oauth_client.web_server.get_access_token(github_user.token, params[:code], :redirect_uri => redirect_uri)
+        user = JSON.parse(access_token.get('/api/v2/json/user/show'))
+        "<p>Your OAuth access token: #{access_token.token}</p><p>Your extended profile data:\n#{user.inspect}</p>"
+      rescue OAuth2::HTTPError
+        %(<p>Outdated ?code=#{params[:code]}:</p><p>#{$!}</p><p><a href="/auth/github">Retry</a></p>)
       end
     end
 

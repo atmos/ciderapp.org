@@ -8,6 +8,7 @@ describe "Ciderapp.org" do
 
   it "GET /profile redirects to github oauth" do
     response = get "/profile"
+
     uri = Addressable::URI.parse(response.headers["Location"])
     uri.should_not be_nil
     uri.scheme.should eql('https')
