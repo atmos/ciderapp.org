@@ -24,7 +24,7 @@ describe "Ciderapp.org" do
     response = get "/latest"
     data = JSON.parse(response.body)
 
-    data["recipes"].should eql(["homebrew", "rvm", "node", "rails", "sinatra"])
+    data["recipes"].should eql(["homebrew", "homebrew::dbs", "homebrew::misc", "ruby", "ruby::irbrc", "ruby::rails", "ruby::sinatra", "node" ])
   end
 
   it "GET /refresh responds w/ the status of generating a new tgz" do

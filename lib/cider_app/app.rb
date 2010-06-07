@@ -57,7 +57,12 @@ module CiderApp
 
     get '/latest' do
       content_type :json
-      { :recipes => [ :homebrew, :rvm, :node, :rails, :sinatra ]  }.to_json
+      { :recipes =>
+          [ "homebrew", "homebrew::dbs", "homebrew::misc",
+            "ruby", "ruby::irbrc", "ruby::rails", "ruby::sinatra",
+            "node"
+          ]
+      }.to_json
     end
 
     post '/refresh' do
