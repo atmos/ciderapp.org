@@ -59,8 +59,7 @@ module CiderApp
       content_type :json
       { :recipes =>
           [ "homebrew", "homebrew::dbs", "homebrew::misc",
-            "ruby", "ruby::irbrc", "ruby::rails", "ruby::sinatra",
-            "node"
+            "ruby", "ruby::irbrc", "node"
           ]
       }.to_json
     end
