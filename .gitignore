@@ -3,3 +3,4 @@ coverage
 public
 config/oauth2.yml
 log
+tmp

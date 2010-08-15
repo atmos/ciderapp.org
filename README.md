@@ -1,7 +1,7 @@
 ciderapp.org
 ============
 
-A web service for sending development recipes to cider app clients.
+A web service for sending development recipes to the cider client.
 
 Developing
 ==========

@@ -10,7 +10,6 @@ group :test do
   gem "rake"
   gem "rcov"
   gem "rspec",            "~>1.3.0", :require => "spec"
-  gem "bundler",          "~>0.9.25"
   gem "rack-test",        "~>0.5.3", :require => "rack/test"
   gem "addressable",      "~>2.1.2"
 end

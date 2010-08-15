@@ -6,8 +6,7 @@ module CiderApp
 
   class App < Sinatra::Base
     set     :root, File.expand_path(File.join(File.dirname(__FILE__), "..", ".."))
-    set     :config, YAML.load_file(File.join(root, 'config', 'oauth2.yml'))
-    set     :github_options, { :client_id => config['client_id'], :secret => config['secret'] }
+    set     :github_options, { :client_id => ENV["GITHUB_CLIENT_ID"], :secret => ENV["GITHUB_CLIENT_SECRET"] }
 
     enable  :sessions
     enable  :raise_errors
@@ -17,12 +16,11 @@ module CiderApp
 
     helpers do
       def silently_run(command)
-        system("mkdir -p #{options.root}/log")
-        system("#{command} >> #{options.root}/log/run.log 2>&1")
+        system("#{command} >> ./run.log 2>&1")
       end
 
       def recipe_file
-        @recipe_file ||= "#{options.root}/public/cider.tgz"
+        @recipe_file ||= "cider.tgz"
       end
     end
 
@@ -55,6 +53,10 @@ module CiderApp
       end
     end
 
+    get '/cider.tgz' do
+      send_file("./tmp/#{recipe_file}")
+    end
+
     get '/latest' do
       content_type :json
       { :recipes =>
@@ -67,8 +69,7 @@ module CiderApp
     post '/refresh' do
       content_type :json
 
-      Dir.chdir(Dir.tmpdir) do
-        FileUtils.mkdir_p "#{options.root}/public"
+      Dir.chdir("./tmp") do
         if File.directory?("smeagol")
           Dir.chdir("smeagol") do
             silently_run("ls -l")
@@ -80,7 +81,7 @@ module CiderApp
           silently_run("git clone git://github.com/atmos/smeagol.git")
         end
         Dir.chdir("smeagol") do
-          silently_run("tar czf #{recipe_file} --exclude certificates --exclude config --exclude .git --exclude roles --exclude site-cookbooks .")
+          silently_run("tar czf ../#{recipe_file} --exclude certificates --exclude config --exclude .git --exclude roles --exclude site-cookbooks .")
         end
       end
       { :status => $? == 0 }.to_json
