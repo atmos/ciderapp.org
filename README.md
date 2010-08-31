@@ -1,10 +1,12 @@
 ciderapp.org
 ============
 
-A web service for sending development recipes to the cider client.
+A web app for sending chef recipes to the [cinderella][cinderella] client.
 
 Developing
 ==========
     % gem install bundler
     % bundle install
     % bundle exec rake
+
+[cinderella]: http://github.com/atmos/cinderella

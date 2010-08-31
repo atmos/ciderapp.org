@@ -24,7 +24,7 @@ describe "Ciderapp.org" do
     response = get "/latest"
     data = JSON.parse(response.body)
 
-    data["recipes"].should eql(["homebrew", "homebrew::dbs", "homebrew::misc", "ruby", "ruby::irbrc", "ruby::rails", "ruby::sinatra", "node" ])
+    data["recipes"].should eql(["homebrew", "homebrew::dbs", "homebrew::misc", "ruby", "ruby::irbrc", "node"])
   end
 
   it "GET /refresh responds w/ the status of generating a new tgz" do
@@ -33,5 +33,11 @@ describe "Ciderapp.org" do
 
     response = post "/refresh"
     JSON.parse(response.body)["status"].should be_true
+  end
+
+  it "GET /solo_rb responds w/ the latest solo.rb file" do
+    response = get "/solo.rb"
+    response.status.should eql(200)
+    response['Content-Type'].should eql('text/plain;charset=utf-8')
   end
 end
