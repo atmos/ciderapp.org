@@ -3,7 +3,7 @@ require File.dirname(__FILE__) + "/spec_helper"
 describe "Ciderapp.org" do
   it "GET / redirects to the github page" do
     response = get "/"
-    response.headers['Location'].should eql('http://www.atmos.org/cider')
+    response.headers['Location'].should eql('http://www.atmos.org/cinderella/intro.html')
   end
 
   it "GET /profile redirects to github oauth" do

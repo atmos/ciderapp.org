@@ -1,9 +1,6 @@
 require 'sinatra/auth/github'
 
 module CiderApp
-  class MisconfiguredOauthTokens < StandardError; end
-
-
   class App < Sinatra::Base
     set     :root, File.expand_path(File.join(File.dirname(__FILE__), "..", ".."))
     set     :github_options, { :client_id => ENV["GITHUB_CLIENT_ID"], :secret => ENV["GITHUB_CLIENT_SECRET"] }
@@ -54,7 +51,7 @@ module CiderApp
       if authenticated?
         redirect '/profile'
       else
-        redirect 'http://www.atmos.org/cider'
+        redirect 'http://www.atmos.org/cinderella/intro.html'
       end
     end
 

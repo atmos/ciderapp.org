@@ -2,7 +2,7 @@
 # Chef Solo Config File
 #
 
-cider_root      = File.expand_path("~/.cider")
+cinderella_root = File.expand_path("~/.cinderella")
 
 log_level       :info
 log_location    STDOUT
@@ -10,8 +10,8 @@ log_location    STDOUT
 recipe_url      "http://ciderapp.org/cider.tgz"
 json_attribs    "http://ciderapp.org/latest"
 
-sandbox_path     "#{cider_root}/sandboxes"
-cookbook_path    "#{cider_root}/cookbooks"
-file_cache_path  "#{cider_root}"
-file_backup_path "#{cider_root}/backup"
-cache_options   ({ :path => "#{cider_root}/cache/checksums", :skip_expires => true })
+sandbox_path     "#{cinderella_root}/sandboxes"
+cookbook_path    "#{cinderella_root}/cookbooks"
+file_cache_path  "#{cinderella_root}"
+file_backup_path "#{cinderella_root}/backup"
+cache_options   ({ :path => "#{cinderella_root}/cache/checksums", :skip_expires => true })
