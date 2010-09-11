@@ -4,3 +4,4 @@ public
 config/oauth2.yml
 log
 tmp
+.DS_Store
