@@ -1,12 +1,29 @@
 GEM
   remote: http://rubygems.org/
   specs:
+    activemodel (3.0.0)
+      activesupport (= 3.0.0)
+      builder (~> 2.1.2)
+      i18n (~> 0.4.1)
+    activesupport (3.0.0)
     addressable (2.1.2)
+    bson (1.0.4)
+    bson_ext (1.0.7)
+    builder (2.1.2)
     faraday (0.4.6)
       addressable (>= 2.1.1)
       rack (>= 1.0.1)
+    i18n (0.4.1)
     json (1.4.6)
     mime-types (1.16)
+    mongo (1.0.7)
+      bson (>= 1.0.4)
+    mongoid (2.0.0.beta.17)
+      activemodel (~> 3.0.0)
+      bson (= 1.0.4)
+      mongo (= 1.0.7)
+      tzinfo (~> 0.3.22)
+      will_paginate (~> 3.0.pre)
     multi_json (0.0.4)
     oauth2 (0.0.13)
       faraday (~> 0.4.1)
@@ -29,18 +46,22 @@ GEM
       sinatra (~> 1.0)
       warden-github (~> 0.0.5)
     toadhopper (1.0.4)
+    tzinfo (0.3.23)
     warden (0.10.7)
       rack (>= 1.0.0)
     warden-github (0.0.6)
       json (>= 1.0.0)
       oauth2 (~> 0.0.8)
       warden (~> 0.10)
+    will_paginate (3.0.pre2)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
   addressable (~> 2.1.2)
+  bson_ext (~> 1.0.4)
+  mongoid (~> 2.0.0.beta.17)
   rack (~> 1.1.0)
   rack-test (~> 0.5.3)
   rack_hoptoad (~> 0.1.2)

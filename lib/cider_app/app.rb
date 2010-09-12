@@ -4,10 +4,12 @@ module CiderApp
   class App < Sinatra::Base
     set     :root, File.expand_path(File.join(File.dirname(__FILE__), "..", ".."))
     set     :github_options, { :client_id => ENV["GITHUB_CLIENT_ID"], :secret => ENV["GITHUB_CLIENT_SECRET"] }
+    set     :views, File.dirname(__FILE__) + '/views'
 
     enable  :sessions
     enable  :raise_errors
     disable :show_exceptions
+
 
     register Sinatra::Auth::Github
 
@@ -87,6 +89,15 @@ module CiderApp
       content_type :json
       refresh_cookbooks
       { :status => $? == 0 }.to_json
+    end
+
+    get '/runlists/:login' do
+       if authenticated?
+         erb :customize
+      else
+        redirect '/profile'
+      end     
+      
     end
   end
 end
