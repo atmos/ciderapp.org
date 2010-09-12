@@ -13,6 +13,19 @@ module CiderApp
 
     register Sinatra::Auth::Github
 
+    configure  do
+      Mongoid.configure do |config|
+        name = "ciderapp"
+        host = "localhost"
+        config.master = Mongo::Connection.new.db(name)
+        config.slaves = [
+          Mongo::Connection.new(host, 27017, :slave_ok => true).db(name)
+        ]
+        config.persist_in_safe_mode = false
+      end
+    end
+
+
     helpers do
       def silently_run(command)
         system("#{command} >> ./run.log 2>&1")
@@ -79,9 +92,9 @@ module CiderApp
     get '/latest' do
       content_type :json
       { :recipes =>
-          [ "homebrew", "homebrew::dbs", "homebrew::misc",
+        [ "homebrew", "homebrew::dbs", "homebrew::misc",
             "ruby", "ruby::irbrc", "node"
-          ]
+        ]
       }.to_json
     end
 
@@ -92,12 +105,14 @@ module CiderApp
     end
 
     get '/runlists/:login' do
-       if authenticated?
-         erb :customize
+      if authenticated?
+        @user = User.load_user
+
+        erb :customize
       else
         redirect '/profile'
       end     
-      
+
     end
   end
 end
