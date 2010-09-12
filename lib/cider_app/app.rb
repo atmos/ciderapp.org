@@ -6,22 +6,11 @@ require "User"
 
 
 module CiderApp
-  class Github_mock
-    def login
-      "garrensmith"
-    end
-
-    def name
-      "garren smith"
-    end
-  end
-    
-  
+   
 
   class App < Sinatra::Base
     set     :root, File.expand_path(File.join(File.dirname(__FILE__), "..", ".."))
-    set     :github_options, { :client_id => ENV["GITHUB_CLIENT_ID"], :secret => ENV["GITHUB_CLIENT_SECRET"],  :github_callback_url => "http://localhost:9292/auth/github/callback"
- }
+    set     :github_options, { :client_id => ENV["GITHUB_CLIENT_ID"], :secret => ENV["GITHUB_CLIENT_SECRET"]}
     set     :views, File.dirname(__FILE__) + '/views'
       
     enable  :sessions
@@ -137,17 +126,21 @@ module CiderApp
     end
 
     post '/update' do
+      begin
+
       @user = User.load_user(github_user.login)
-      selected_recipes = params["recipes"].split(',')
-           
-      @user.recipes.delete_all
-     
+      selected_recipes = params["recipes"].split(',')           
+      @user.recipes.delete_all     
       selected_recipes.each do |recipe_name|
         @user.recipes << Recipe.new(:name => recipe_name)
       end
 
       @user.save
-
+      "Recipes saved!"
+      rescue
+      "Oops, failed to save"
+      end
+      
     end
   end
 end

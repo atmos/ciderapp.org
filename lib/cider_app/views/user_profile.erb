@@ -17,6 +17,12 @@
         margin-right: auto ;
       }
 
+      #info{
+        margin-top:15px;
+        color:blue;
+
+      }
+
 
     </style>  
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
@@ -24,6 +30,8 @@
     <script type='text/javascript'>
       $(document).ready(function() {
           $("#submit").click(function(){
+            $("#info").html('')
+
             var datastring = ''
             $("#recipes :checked").each(function() {
               datastring = datastring + $(this).val() + ','
@@ -31,7 +39,10 @@
 
             $.post(
               '/update',
-              {"recipes" : datastring}
+              {"recipes" : datastring},
+              function(data){
+               $("#info").html(data)
+              }
 
               );
             });          
@@ -62,6 +73,7 @@
               <input type="button" id="submit" value="Update" />
             <% end %>
           </form>
+          <div id="info"> </div>
         </div>
 
       </body>
