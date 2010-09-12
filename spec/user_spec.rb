@@ -8,26 +8,21 @@ describe "User model" do
 
   context "loading a user" do
     it "Should create new user if does not exist" do
-      github_user_mock = mock
-      github_user_mock.should_receive(:login).twice.and_return("rambo")
-      github_user_mock.should_receive(:name).and_return("John Rambo")
 
-      User.first(:conditions => {:login => "rambo"}).should be_nil
+      User.first(:conditions => {:name => "rambo"}).should be_nil
 
-      User.load_user(github_user_mock)
+      User.load_user("rambo")
       
-      User.first(:conditions => {:login => "rambo"}).name .should == "John Rambo"
+      User.first(:conditions => {:name => "rambo"}).name.should == "rambo"
 
     end
 
     it "Should load user from db if exists" do
-      github_user_mock = mock
-      github_user_mock.should_receive(:login).and_return("eVedder")      
-      User.new(:name => "Eddie Vedder",:login => "eVedder").save
+      User.new(:name => "eVedder").save
 
-      user = User.load_user(github_user_mock)
+      user = User.load_user("eVedder")
       
-      user.name.should == "Eddie Vedder"
+      user.name.should == "eVedder"
     end
   end
 

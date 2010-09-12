@@ -3,14 +3,13 @@ require 'mongoid'
 class User
   include Mongoid::Document
   field :name
-  field :login
   embeds_many :recipes
 
-  def self.load_user(github_user)
-    user = User.first(:conditions => {:login => github_user.login})
+  def self.load_user(username)
+    user = User.first(:conditions => {:name => username})
     
     if (user.nil?)
-      user = User.new(:name => github_user.name, :login => github_user.login)
+      user = User.new(:name => username)
       user.save
     end
 

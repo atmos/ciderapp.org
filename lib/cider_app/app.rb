@@ -1,11 +1,29 @@
 require 'sinatra/auth/github'
+require 'mongoid'
+puts __FILE__
+$: << File.dirname(__FILE__) + '/models/'
+require "User"
+
 
 module CiderApp
+  class Github_mock
+    def login
+      "garrensmith"
+    end
+
+    def name
+      "garren smith"
+    end
+  end
+    
+  
+
   class App < Sinatra::Base
     set     :root, File.expand_path(File.join(File.dirname(__FILE__), "..", ".."))
-    set     :github_options, { :client_id => ENV["GITHUB_CLIENT_ID"], :secret => ENV["GITHUB_CLIENT_SECRET"] }
+    set     :github_options, { :client_id => ENV["GITHUB_CLIENT_ID"], :secret => ENV["GITHUB_CLIENT_SECRET"],  :github_callback_url => "http://localhost:9292/auth/github/callback"
+ }
     set     :views, File.dirname(__FILE__) + '/views'
-
+      
     enable  :sessions
     enable  :raise_errors
     disable :show_exceptions
@@ -35,6 +53,13 @@ module CiderApp
         @recipe_file ||= "cider.tgz"
       end
 
+      def recipes
+        [ "homebrew", "homebrew::dbs", "homebrew::misc",
+            "ruby", "ruby::irbrc", "node"
+        ]
+       end
+
+     
       def solo_rb
         @solo_rb ||= File.read(File.dirname(__FILE__) + "/solo.rb.txt")
       end
@@ -91,11 +116,7 @@ module CiderApp
 
     get '/latest' do
       content_type :json
-      { :recipes =>
-        [ "homebrew", "homebrew::dbs", "homebrew::misc",
-            "ruby", "ruby::irbrc", "node"
-        ]
-      }.to_json
+       { :recipes => recipes}.to_json
     end
 
     post '/refresh' do
@@ -106,13 +127,28 @@ module CiderApp
 
     get '/runlists/:login' do
       if authenticated?
-        @user = User.load_user
-        @recipes = recipes
+        @user = User.load_user(params[:login])
+        @github_user = github_user
         erb :user_profile
       else
         redirect '/profile'
       end     
 
     end
+
+    post '/update' do
+      @user = User.load_user(github_user.login)
+      selected_recipes = params["recipes"].split(',')
+           
+      @user.recipes.delete_all
+     
+      selected_recipes.each do |recipe_name|
+        @user.recipes << Recipe.new(:name => recipe_name)
+      end
+
+      @user.save
+
+    end
   end
 end
+
