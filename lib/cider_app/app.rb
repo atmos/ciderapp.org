@@ -107,8 +107,8 @@ module CiderApp
     get '/runlists/:login' do
       if authenticated?
         @user = User.load_user
-
-        erb :customize
+        @recipes = recipes
+        erb :user_profile
       else
         redirect '/profile'
       end     

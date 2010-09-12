@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + "/spec_helper"
 
-$: << File.dirname(__FILE__) + '/../lib/models/'
+$: << File.dirname(__FILE__) + '/../lib/cider_app/models/'
 require "user"
 
 
@@ -22,8 +22,7 @@ describe "User model" do
 
     it "Should load user from db if exists" do
       github_user_mock = mock
-      github_user_mock.should_receive(:login).and_return("eVedder")
-      
+      github_user_mock.should_receive(:login).and_return("eVedder")      
       User.new(:name => "Eddie Vedder",:login => "eVedder").save
 
       user = User.load_user(github_user_mock)
