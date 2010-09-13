@@ -117,7 +117,7 @@ module CiderApp
     get '/runlists/:login' do
       if authenticated?
         @user = User.load_user(params[:login])
-        @github_user = github_user
+        github_user
         erb :user_profile
       else
         redirect '/profile'
@@ -127,15 +127,14 @@ module CiderApp
 
     post '/update' do
       begin
-
-      @user = User.load_user(github_user.login)
-      selected_recipes = params["recipes"].split(',')           
-      @user.recipes.delete_all     
+      user = User.load_user(github_user.login)
+      selected_recipes = params["recipes"].split(',') 
+      user.recipes.delete_all     
       selected_recipes.each do |recipe_name|
-        @user.recipes << Recipe.new(:name => recipe_name)
+        user.recipes << Recipe.new(:name => recipe_name)
       end
 
-      @user.save
+      user.save
       "Recipes saved!"
       rescue
       "Oops, failed to save"

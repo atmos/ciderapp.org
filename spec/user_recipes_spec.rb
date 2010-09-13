@@ -1,27 +1,54 @@
 require File.dirname(__FILE__) + "/spec_helper"
+require File.join(File.dirname(__FILE__), '..', 'lib', 'cider_app')
 
+class Github_user_mock
+  def login
+    "garrensmith"
+  end
+end
 
-describe "Creating custom recipes" do
+describe "User Recipes" do
 
-  context "GET /runlists/login" do
-    it "should check if user is authenticated and redirect if not" do
+  context "if authenticated" do
+    before(:all) do
+      CiderApp::App.class_eval do
+        helpers do
+          def authenticated?
+            return true
+          end
 
-      warden = mock()
-      warden.should_receive(:authenticated?).and_return(false)    
+          def github_user
+            Github_user_mock.new
+          end
+        end
+      end
+    end
+
+    it "GET /runlists/login should return view with user details" do
 
       response = get "/runlists/garrensmith"
-      response.headers["location"] =~ /profile/
+      response.should be_ok
+    end
+
+    it "GET /runlists/login should display update button if user same as recipe user" do
+      response = get "/runlists/garrensmith"
+      response.should =~  /<input type="button" id="submit" value="Update"/
 
     end
 
-    it "should return create a user with default settings if user does not exist" do
-      pending
+    it "GET /runlists/login  should not display submit button if user not the same as recipe user" do
+      response = get "/runlists/jimmy"
+      response.should_not =~  /<input type="button" id="submit" value="Update"/
     end
 
-    it "should return view with options to select" do
-      pending
-    end
 
+    it "Post /update should update users details and save" do
+      User.new(:name => "garrensmith").save
+
+      response = post "/update",{"recipes" => "node,ruby"}
+      response.should be_ok
+      response.body.should =~ /saved/
+    end
   end
 
 end

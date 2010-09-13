@@ -22,10 +22,10 @@ begin
     t.spec_opts = %w(-fs --color)
     t.spec_opts << '--loadby' << 'random'
 
-    t.rcov_opts << '--exclude' << 'spec,.bundle,.rvm'
-    t.rcov = ENV.has_key?('NO_RCOV') ? ENV['NO_RCOV'] != 'true' : true
-    t.rcov_opts << '--text-summary'
-    t.rcov_opts << '--sort' << 'coverage' << '--sort-reverse'
+    #t.rcov_opts << '--exclude' << 'spec,.bundle,.rvm'
+    #t.rcov = ENV.has_key?('NO_RCOV') ? ENV['NO_RCOV'] != 'true' : true
+    #t.rcov_opts << '--text-summary'
+    #t.rcov_opts << '--sort' << 'coverage' << '--sort-reverse'
   end
 rescue LoadError
 end
