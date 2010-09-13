@@ -26,4 +26,19 @@ describe "User model" do
     end
   end
 
+  context "Updating recipes" do
+    it "should delete previous recipes and create new list" do
+      user = User.new(:name => "Jimmy")
+      
+      user.recipes << Recipe.new(:name => "node")
+      user.save
+
+      user.update_recipes(["ruby","mongodb"])
+      user.save      
+      
+      user.recipes.count.should == 2
+      user.recipes[0].name.should == "ruby"
+    end
+  end
+
 end

@@ -16,6 +16,13 @@ class User
     user
   end
 
+  def update_recipes(recipe_list)
+    recipes.delete_all     
+      recipe_list.each do |recipe_name|
+        recipes << Recipe.new(:name => recipe_name)
+      end 
+  end
+
 end
 
 class Recipe
