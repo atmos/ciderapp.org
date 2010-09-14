@@ -134,8 +134,16 @@ module CiderApp
       "Recipes saved!"
       rescue
         "Oops, failed to save"
-      end
-      
+      end      
+    end
+
+    get '/userrecipe/:user' do
+      user = User.first(:conditions => {:name => params[:user]})
+            
+      content_type :json
+      return {"recipes" => "User not created a recipe"}.to_json if (user.nil?)
+
+      {"recipes" =>  user.recipes.map{ |recipe| recipe.name }}.to_json   
     end
   end
 end

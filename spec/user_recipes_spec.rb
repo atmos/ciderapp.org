@@ -50,5 +50,29 @@ describe "User Recipes" do
       response.body.should =~ /saved/
     end
   end
+  
+  context "require users info in json" do
+    it "Should Get /userrecipe/chriscornell info" do
+      user = User.new(:name => "chriscornell")
+      user.recipes << Recipe.new(:name => "node")
+      user.recipes << Recipe.new(:name => "ruby")
+      user.recipes << Recipe.new(:name => "homebrew")
+      user.save
+      #puts user.recipes.inspect
+      
+      response = get "/userrecipe/chriscornell"
+      data = JSON.parse(response.body)
+      
+      data["recipes"].should eql(["node", "ruby","homebrew"])
+
+    end
+
+    it "Should return error if user not exist" do
+      response = get "/userrecipe/noone"
+      data = JSON.parse(response.body)
+
+      data["recipes"].should eql("User not created a recipe")
+    end
+  end
 
 end
