@@ -1,15 +1,44 @@
 require 'sinatra/auth/github'
+require 'mongoid'
+require 'uri'
+puts __FILE__
+$: << File.dirname(__FILE__) + '/models/'
+require "User"
+
 
 module CiderApp
+
+
   class App < Sinatra::Base
     set     :root, File.expand_path(File.join(File.dirname(__FILE__), "..", ".."))
-    set     :github_options, { :client_id => ENV["GITHUB_CLIENT_ID"], :secret => ENV["GITHUB_CLIENT_SECRET"] }
+    set     :github_options, { :client_id => ENV["GITHUB_CLIENT_ID"], :secret => ENV["GITHUB_CLIENT_SECRET"]}
+    set     :views, File.dirname(__FILE__) + '/views'
 
     enable  :sessions
     enable  :raise_errors
     disable :show_exceptions
 
+
     register Sinatra::Auth::Github
+
+    configure  do
+
+      if ENV['MONGOHQ_URL']
+        mongo_uri = URI.parse(ENV['MONGOHQ_URL'])
+
+        Mongoid.database = Mongo::Connection.new(mongo_uri.host, mongo_uri.port.to_s).db("ciderapp")
+        Mongoid.database.authenticate(mongo_uri.user,mongo_uri.password)
+      else
+        Mongoid.configure do |config|
+          name = "ciderapp"
+          host = "localhost"
+          config.master = Mongo::Connection.new.db(name)
+          config.slaves = [Mongo::Connection.new(host, 27017, :slave_ok => true).db(name)]
+          config.persist_in_safe_mode = false
+        end
+      end
+    end
+
 
     helpers do
       def silently_run(command)
@@ -19,6 +48,13 @@ module CiderApp
       def recipe_file
         @recipe_file ||= "cider.tgz"
       end
+
+      def recipes
+        [ "homebrew", "homebrew::dbs", "homebrew::misc",
+            "ruby", "ruby::irbrc", "node"
+        ]
+      end
+
 
       def solo_rb
         @solo_rb ||= File.read(File.dirname(__FILE__) + "/solo.rb.txt")
@@ -76,11 +112,7 @@ module CiderApp
 
     get '/latest' do
       content_type :json
-      { :recipes =>
-          [ "homebrew", "homebrew::dbs", "homebrew::misc",
-            "ruby", "ruby::irbrc", "node","python", "erlang"
-          ]
-      }.to_json
+      { :recipes => recipes}.to_json
     end
 
     post '/refresh' do
@@ -88,5 +120,38 @@ module CiderApp
       refresh_cookbooks
       { :status => $? == 0 }.to_json
     end
+
+    get '/runlists/:login' do
+      if authenticated?
+        @user = User.load_user(params[:login])
+        erb :user_profile
+      else
+        redirect '/profile'
+      end
+
+    end
+
+    post '/update' do
+      begin
+        user = User.load_user(github_user.login)
+        selected_recipes = params["recipes"].split(',')
+
+        user.update_recipes(selected_recipes)
+        user.save
+      "Recipes saved!"
+      rescue
+        "Oops, failed to save"
+      end
+    end
+
+    get '/userrecipe/:user' do
+      user = User.first(:conditions => {:name => params[:user]})
+
+      content_type :json
+      return {"recipes" => "User not created a recipe"}.to_json if (user.nil?)
+
+      {"recipes" =>  user.recipes.map{ |recipe| recipe.name }}.to_json
+    end
   end
 end
+

@@ -4,6 +4,8 @@ group :runtime do
   gem "rack",                "~>1.1.0"
   gem "rack_hoptoad",        "~>0.1.2", :require => "rack/hoptoad"
   gem "sinatra_auth_github", "~>0.0.8", :require => "sinatra/auth/github"
+  gem "mongoid",             "~>2.0.0.beta.17"
+  gem "bson_ext",            "~>1.0.4"
 end
 
 group :test do
