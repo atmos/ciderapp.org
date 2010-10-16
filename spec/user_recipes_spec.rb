@@ -31,7 +31,6 @@ describe "User Recipes" do
       response = get "/profile/#{user.name}/recipes"
       data = JSON.parse(response.body)
 
-      pp response
       data["recipes"].should eql(["homebrew", "homebrew::dbs", "homebrew::misc", "node", "ruby"])
     end
   end

@@ -3,15 +3,13 @@ require File.dirname(__FILE__) + "/spec_helper"
 describe "User model" do
   context "Updating recipes" do
     it "should delete previous recipes and create new list" do
-      user = User.new(:name => "Jimmy")
+      user = User.get("Jimmy")
 
-      user.recipes << Recipe.new(:name => "node")
-      user.save
+      user.run_list.should eql(["ruby", "ruby::irbrc", "node", "python", "erlang"])
 
       user.run_list = [ "ruby","mongodb" ]
 
-      user.recipes.count.should == 2
-      user.recipes[0].name.should == "ruby"
+      user.run_list.should eql(["ruby", "mongodb"])
     end
   end
 end

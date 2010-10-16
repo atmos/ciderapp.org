@@ -3,7 +3,6 @@ require 'mongoid'
 require 'fileutils'
 require 'sinatra_auth_github'
 
-
 module CiderApp
   def self.app
     @app ||= Rack::Builder.new do
@@ -18,4 +17,4 @@ module CiderApp
 end
 
 require File.dirname(__FILE__)+'/cider_app/app'
-require File.dirname(__FILE__)+'/cider_app/models/User'
+require File.dirname(__FILE__)+'/cider_app/models/user'

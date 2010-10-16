@@ -77,7 +77,11 @@ module CiderApp
     end
 
     get '/' do
-      erb :home
+      if authenticated?
+        redirect "/profile"
+      else
+        erb :home
+      end
     end
 
     get '/profile' do
@@ -99,7 +103,7 @@ module CiderApp
 
     put '/profile/:user/recipes' do
       if authenticated?
-        selected_recipes = params['recipes'].split(',')
+        selected_recipes = optional_recipes.map { |recipe| params[recipe] }.flatten
         user.run_list    = selected_recipes
       end
       redirect '/profile'
