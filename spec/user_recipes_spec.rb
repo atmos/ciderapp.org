@@ -34,5 +34,11 @@ describe "User Recipes" do
       pp response
       data["recipes"].should eql(["homebrew", "homebrew::dbs", "homebrew::misc", "node", "ruby"])
     end
+
+    it "returns name " do
+      response = get "/name"
+      pp response
+
+    end
   end
 end

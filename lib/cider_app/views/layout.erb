@@ -27,33 +27,11 @@
     </style>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
 
-    <script type='text/javascript'>
-      $(document).ready(function() {
-          $("#submit").click(function(){
-            $("#info").html('')
-
-            var datastring = ''
-            $("#recipes :checked").each(function() {
-              datastring = datastring + $(this).val() + ','
-              });
-
-            $.put(
-              '/update',
-              {"recipes" : datastring},
-              function(data){
-               $("#info").html(data)
-              }
-
-              );
-            });
-
-          });
-    </script>
-
+   
   </head>
   <body>
     <div class="content">
-       <%= yield %>
+      <%= yield %>
     </div>
   </body>
 </html>

@@ -14,9 +14,11 @@ class User
 
   def run_list=(run_list)
     recipes.delete_all
+    #pp recipes
     run_list.each do |recipe_name|
       recipes << Recipe.new(:name => recipe_name)
     end
+    #pp recipes
     save
   end
 

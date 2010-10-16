@@ -14,6 +14,7 @@ describe "Ciderapp.org" do
     uri.scheme.should eql('https')
 
     params = uri.query_values
+    pp params
     params['type'].should eql('web_server')
     params['scope'].should eql('email,offline_access')
     params['client_id'].should match(/\w{20}/)

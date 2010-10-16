@@ -45,7 +45,7 @@ module CiderApp
       end
 
       def user_recipes
-        pp user.recipes.map { |recipe| recipe.name }
+       # pp user.recipes.map { |recipe| recipe.name }
         [ "homebrew", "homebrew::dbs", "homebrew::misc" ] +
           user.recipes.map { |recipe| recipe.name }
       end
@@ -101,8 +101,8 @@ module CiderApp
       if authenticated?
         selected_recipes = params['recipes'].split(',')
         user.run_list    = selected_recipes
+        return "recipes updated"
       end
-      redirect '/profile'
     end
 
     get '/cider.tgz' do
@@ -124,6 +124,10 @@ module CiderApp
       content_type :json
       refresh_cookbooks
       { :status => $? == 0 }.to_json
+    end
+
+    get '/name' do
+      user_recipes.name
     end
 
     get '/logout' do
