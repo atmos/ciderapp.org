@@ -3,7 +3,7 @@ require File.dirname(__FILE__) + "/spec_helper"
 describe "Ciderapp.org" do
   it "GET / redirects to the github page" do
     response = get "/"
-    response.headers['Location'].should eql('http://www.atmos.org/cinderella/intro.html')
+    response.should =~ /profile/
   end
 
   it "GET /profile redirects to github oauth" do
@@ -24,7 +24,7 @@ describe "Ciderapp.org" do
     response = get "/latest"
     data = JSON.parse(response.body)
 
-    data["recipes"].should eql(["homebrew", "homebrew::dbs", "homebrew::misc", "ruby", "ruby::irbrc", "node"])
+    data["recipes"].should eql(["homebrew", "homebrew::dbs", "homebrew::misc", "ruby", "ruby::irbrc", "node", "python"])
   end
 
   it "GET /refresh responds w/ the status of generating a new tgz" do

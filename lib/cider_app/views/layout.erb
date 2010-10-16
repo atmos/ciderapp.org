@@ -3,7 +3,7 @@
   <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <title>User Profile</title>
-    <style type="text/css"> 
+    <style type="text/css">
       body,input {
         font-size: 18pt;
         font-family: century gothic;
@@ -24,7 +24,7 @@
       }
 
 
-    </style>  
+    </style>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
 
     <script type='text/javascript'>
@@ -37,7 +37,7 @@
               datastring = datastring + $(this).val() + ','
               });
 
-            $.post(
+            $.put(
               '/update',
               {"recipes" : datastring},
               function(data){
@@ -45,37 +45,15 @@
               }
 
               );
-            });          
+            });
 
           });
     </script>
 
-
-      </head>
-      <body>
-
-
-        <div class="content">
-          <h1> <%= @user.name %>'s Cinderella Recipes</h1>
-          <form id="recipes">
-
-            <% recipes.each do |recipe|  %>
-              <input type=checkbox value="<%= recipe %>"
-              <% @user.recipes.each do |user_recipe| %>
-                <% if user_recipe.name == recipe %>
-                  CHECKED
-                <% end %>
-              <% end %>
-
-              > <%= recipe %> <br /> 
-            <% end %>
-            <% if @user.name == github_user.login %>
-              <input type="button" id="submit" value="Update" />
-            <% end %>
-          </form>
-          <div id="info"> </div>
-        </div>
-
-      </body>
-    </html>
-
+  </head>
+  <body>
+    <div class="content">
+       <%= yield %>
+    </div>
+  </body>
+</html>

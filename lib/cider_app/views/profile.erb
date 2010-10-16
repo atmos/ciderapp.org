@@ -1,0 +1,15 @@
+<h1> <%= user.name %>'s Cinderella Recipes</h1>
+<form id="recipes">
+  <% optional_recipes.each do |recipe|  %>
+    <input type=checkbox value="<%= recipe %>"
+    <% user.recipes.each do |user_recipe| %>
+      <% if user_recipe.name == recipe %>
+        CHECKED
+      <% end %>
+    <% end %>
+
+    > <%= recipe %> <br />
+  <% end %>
+  <input type="button" id="submit" value="Update" />
+</form>
+<div id="info"></div>
