@@ -1,6 +1,14 @@
 require File.dirname(__FILE__) + "/spec_helper"
 
 describe "User Recipes" do
+   
+  context "if not authenticated" do
+    it "GET /profile should authenticate user" do
+      response = get "/profile"
+      response.should be_redirect
+    end
+  end
+
   context "if authenticated" do
     let(:user) { User.create(:name => "garrensmith") }
 
@@ -24,9 +32,13 @@ describe "User Recipes" do
       response.should =~  /<input type="button" id="submit" value="Update"/
     end
 
-    it "PUT /users/:user should update users desired recipes and save" do
+    it "PUT /users/:user should update users desired recipes and reply with recipes saved" do
       response = put "/profile/#{user.name}/recipes", {"recipes" => "node,ruby"}
-      response.should be_redirect
+      response.body.should =~ /recipe's updated/
+    end
+
+    it "PUT /users/:user should save users recipes" do
+      response = put "/profile/#{user.name}/recipes", {"recipes" => "node,ruby"}
 
       response = get "/profile/#{user.name}/recipes"
       data = JSON.parse(response.body)
@@ -34,11 +46,7 @@ describe "User Recipes" do
       pp response
       data["recipes"].should eql(["homebrew", "homebrew::dbs", "homebrew::misc", "node", "ruby"])
     end
-
-    it "returns name " do
-      response = get "/name"
-      pp response
-
-    end
   end
+
+ 
 end

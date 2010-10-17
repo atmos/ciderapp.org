@@ -99,9 +99,13 @@ module CiderApp
 
     put '/profile/:user/recipes' do
       if authenticated?
-        selected_recipes = params['recipes'].split(',')
-        user.run_list    = selected_recipes
-        return "recipes updated"
+        begin
+          selected_recipes = params['recipes'].split(',')
+          user.run_list    = selected_recipes
+          "recipe's updated"
+        rescue
+          "Oops, failed to save"
+        end
       end
     end
 
@@ -124,10 +128,6 @@ module CiderApp
       content_type :json
       refresh_cookbooks
       { :status => $? == 0 }.to_json
-    end
-
-    get '/name' do
-      user_recipes.name
     end
 
     get '/logout' do
