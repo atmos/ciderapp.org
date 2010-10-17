@@ -35,19 +35,11 @@ module CiderApp
       end
 
       def default_recipes
-        [ "homebrew", "homebrew::dbs", "homebrew::misc",
-          "ruby", "ruby::irbrc", "node", "python"
-        ]
+        User.default_recipes
       end
 
       def optional_recipes
-        [ "ruby", "ruby::irbrc", "node", "python", "erlang", "oh-my-zsh" ]
-      end
-
-      def user_recipes
-        pp user.recipes.map { |recipe| recipe.name }
-        [ "homebrew", "homebrew::dbs", "homebrew::misc" ] +
-          user.recipes.map { |recipe| recipe.name }
+        User.optional_recipes
       end
 
       def solo_rb
@@ -95,7 +87,7 @@ module CiderApp
     get '/profile/:user/recipes' do
       if user
         content_type :json
-        {"recipes" =>  user_recipes}.to_json
+        {"recipes" =>  user.run_list}.to_json
       else
         not_found
       end
@@ -103,7 +95,7 @@ module CiderApp
 
     put '/profile/:user/recipes' do
       if authenticated?
-        selected_recipes = optional_recipes.map { |recipe| params[recipe] }.flatten
+        selected_recipes = optional_recipes.map { |recipe| params[recipe] }.compact
         user.run_list    = selected_recipes
       end
       redirect '/profile'

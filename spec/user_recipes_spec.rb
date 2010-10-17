@@ -21,11 +21,11 @@ describe "User Recipes" do
     it "GET /profile should return view with user details" do
       response = get "/profile"
       response.should be_ok
-      response.should =~  /<input type="button" id="submit" value="Update"/
+      response.should =~  /<input type="submit" id="submit" value="Update"/
     end
 
     it "PUT /users/:user should update users desired recipes and save" do
-      response = put "/profile/#{user.name}/recipes", {"recipes" => "node,ruby"}
+      response = put "/profile/#{user.name}/recipes", { "node" => "node", "ruby" => "ruby" }
       response.should be_redirect
 
       response = get "/profile/#{user.name}/recipes"
