@@ -1,7 +1,7 @@
 <h1> <%= user.name %>'s Cinderella Recipes</h1>
 <form id="recipes" action="/profile/<%= @user.name %>/recipes" method="POST">
   <input type="hidden" name="_method" value="PUT" />
-  <% optional_recipes.each do |recipe|  %>
+  <% User.optional_recipes.each do |recipe|  %>
     <input type=checkbox name="<%= recipe %>" value="<%= recipe %>"
     <% user.recipes.each do |user_recipe| %>
       <% if user_recipe.name == recipe %>

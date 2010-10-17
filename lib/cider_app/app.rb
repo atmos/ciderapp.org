@@ -1,7 +1,3 @@
-require 'sinatra/auth/github'
-require 'mongoid'
-require 'uri'
-
 module CiderApp
   class App < Sinatra::Base
     set     :root, File.expand_path(File.join(File.dirname(__FILE__), "..", ".."))
@@ -16,7 +12,7 @@ module CiderApp
     register Sinatra::Auth::Github
 
     configure  do
-      mongo_url = ENV['MONGOHQ_URL'] || 'localhost:27017'
+      mongo_url = ENV['MONGOHQ_URL'] || 'mongodb://localhost:27017/ciderapp'
       mongo_uri = URI.parse(mongo_url)
 
       Mongoid.database = Mongo::Connection.new(mongo_uri.host, mongo_uri.port.to_s).db(mongo_uri.path.gsub('/', ''))
@@ -32,14 +28,6 @@ module CiderApp
 
       def recipe_file
         @recipe_file ||= "cider.tgz"
-      end
-
-      def default_recipes
-        User.default_recipes
-      end
-
-      def optional_recipes
-        User.optional_recipes
       end
 
       def solo_rb
@@ -95,8 +83,7 @@ module CiderApp
 
     put '/profile/:user/recipes' do
       if authenticated?
-        selected_recipes = optional_recipes.map { |recipe| params[recipe] }.compact
-        user.run_list    = selected_recipes
+        user.run_list = params.keys
       end
       redirect '/profile'
     end
@@ -113,7 +100,7 @@ module CiderApp
 
     get '/latest' do
       content_type :json
-      { :recipes => default_recipes}.to_json
+      { :recipes => User.default_recipes}.to_json
     end
 
     post '/refresh' do

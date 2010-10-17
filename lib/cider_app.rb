@@ -1,7 +1,8 @@
+require 'uri'
 require 'yaml'
 require 'mongoid'
 require 'fileutils'
-require 'sinatra_auth_github'
+require 'sinatra/auth/github'
 
 module CiderApp
   def self.app
