@@ -20,7 +20,7 @@ module CiderApp
       mongo_uri = URI.parse(mongo_url)
 
       Mongoid.database = Mongo::Connection.new(mongo_uri.host, mongo_uri.port.to_s).db("ciderapp")
-      if mongo_uri.user && mong_uri.password
+      if mongo_uri.user && mongo_uri.password
         Mongoid.database.authenticate(mongo_uri.user,mongo_uri.password)
       end
     end
