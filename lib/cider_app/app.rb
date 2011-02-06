@@ -27,7 +27,7 @@ module CiderApp
       end
 
       def recipe_file
-        @recipe_file ||= "cider.tgz"
+        @recipe_file ||= File.expand_path(File.dirname(__FILE__) + "/../../cider.tgz")
       end
 
       def solo_rb
@@ -36,23 +36,6 @@ module CiderApp
 
       def user
         @user ||= User.get(github_user.login)
-      end
-
-      def refresh_cookbooks
-        Dir.chdir("./tmp") do
-          if File.directory?("smeagol")
-            Dir.chdir("smeagol") do
-              silently_run("git checkout master")
-              silently_run("git reset --hard origin/master")
-              silently_run("git pull")
-            end
-          else
-            silently_run("git clone git://github.com/atmos/smeagol.git")
-          end
-          Dir.chdir("smeagol") do
-            silently_run("tar czf ../#{recipe_file} --exclude certificates --exclude config --exclude .git --exclude roles --exclude site-cookbooks .")
-          end
-        end
       end
     end
 
@@ -89,8 +72,7 @@ module CiderApp
     end
 
     get '/cider.tgz' do
-      refresh_cookbooks unless File.exists?("./tmp/#{recipe_file}")
-      send_file("./tmp/#{recipe_file}")
+      send_file(recipe_file)
     end
 
     get '/solo.rb' do
