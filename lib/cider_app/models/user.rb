@@ -13,7 +13,7 @@ class User
   end
 
   def self.optional_recipes
-    [ "ruby", "ruby::irbrc", "node", "python", "erlang", "oh-my-zsh" ]
+    [ "ruby::rbenv", "ruby::irbrc", "node", "python", "erlang", "oh-my-zsh" ]
   end
 
   def self.get(username)
