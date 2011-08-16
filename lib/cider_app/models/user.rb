@@ -8,12 +8,13 @@ class User
 
   def self.default_recipes
     [ "homebrew", "homebrew::dbs", "homebrew::misc",
-      "ruby", "ruby::irbrc", "node", "python"
+      "ruby", "ruby::rbenv", "node", "python", "erlang",
+      "mvim::cli"
     ]
   end
 
   def self.optional_recipes
-    [ "ruby::rbenv", "ruby::irbrc", "node", "python", "erlang", "oh-my-zsh" ]
+    [ "ruby", "ruby::rbenv", "node", "python", "erlang", "oh-my-zsh" ]
   end
 
   def self.get(username)
