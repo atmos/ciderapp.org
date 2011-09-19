@@ -7,9 +7,10 @@ class User
 
 
   def self.default_recipes
-    [ "homebrew", "homebrew::dbs", "homebrew::misc",
-      "ruby", "ruby::rbenv", "node", "python", "erlang",
-      "mvim::cli"
+    [ "homebrew", "homebrew::misc",
+      "mvim::cli", "ruby", "ruby::rbenv",
+      "homebrew::dbs",
+      "node", "python", "erlang"
     ]
   end
 
